@@ -1,0 +1,42 @@
+{
+	"conn":[
+		{
+			"serverId":"CO000001",
+			"agentId":"AG000001",
+            "machine":"m1",
+			"frontend":{
+                "maxConnection":5000,
+                "listenings":{
+                    "ws":{"port":9200, "params":{"old":1}}
+                }
+            }
+		}
+	],
+	
+	"user":[
+		{
+			"serverId":"US000001",
+			"agentId":"AG000001",
+            "machine":"m1"
+		}
+	],
+	
+    "http":[
+        {
+            "serverId":"HT000001",
+            "agentId":"AG000001",
+            "machine":"m1",
+            "http":{
+                "port":9000
+            }
+        }
+    ],
+    
+    "room":[
+    	{
+    		"serverId":"RM000001",
+    		"agentId":"AG000001",
+    		"machine":"m1"
+    	}
+    ]
+}

@@ -1,0 +1,35 @@
+{
+	"conn":[
+		{
+			"serverId":"conn_1",
+			"agentId":"agent_1",
+            "machine":"m1",
+			"frontend":{
+                "maxConnection":5000,
+                "listenings":{
+                    "tcp":{"port":9100},
+                    "ws":{"port":9200}
+                }
+            }
+		}
+	],
+	
+	"user":[
+		{
+			"serverId":"user_1",
+			"agentId":"agent_1",
+            "machine":"m1"
+		}
+	],
+	
+    "http":[
+        {
+            "serverId":"http_1",
+            "agentId":"agent_1",
+            "machine":"m1",
+            "http":{
+                "port":9000
+            }
+        }
+    ]
+}

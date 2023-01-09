@@ -1,0 +1,10 @@
+{
+	"m1":{
+		"internet":"127.0.0.1",
+		"intranet":"127.0.0.1",
+		"ip":"127.0.0.1",
+		"password":"xingyue@123",
+		"user":"xingyue",
+		"ssh":22
+	}
+}

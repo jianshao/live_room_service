@@ -1,0 +1,26 @@
+{
+	"exchanges":[
+		{
+			"exchangeId":"EX_GCOIN_3W",
+			"displayName":"3万金币",
+			"desc":"3万金币",
+			"cost":{
+				"assetId":"bank:coupon",
+				"count":300
+			},
+			"delivery":{
+				"typeId":"ex.delivery:xy",
+				"content":{
+					"typeId":"FixedContent",
+					"items":[
+						{
+							"assetId":"user:gcoin",
+							"count":30000
+						}
+					]
+				}
+			},
+			"tags":["hot"]
+		}
+	]
+}

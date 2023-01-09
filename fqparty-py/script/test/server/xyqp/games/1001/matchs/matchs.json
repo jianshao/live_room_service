@@ -1,0 +1,34 @@
+{
+	"matchs":[
+		{
+			"matchId":100100101,
+			"regionId":1001001
+		},
+		{
+			"matchId":100100102,
+			"regionId":1001001
+		},
+		{
+			"matchId":100100103,
+			"regionId":1001001
+		},
+		{
+			"matchId":100100201,
+			"regionId":1001002
+		},
+		{
+			"matchId":100102101,
+			"regionId":1001021
+		},
+		{
+			"matchId":100102102,
+			"regionId":1001021
+		},
+		{
+			"matchId":100102103,
+			"regionId":1001021
+		}
+	]
+}
+
+

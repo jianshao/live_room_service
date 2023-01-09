@@ -1,0 +1,16 @@
+{
+	"matchType":"gates",
+	"tableCount":100,
+	"tableSeatCount":3,
+	"idleTime":300,
+	"assigningTimeout":20,
+	"playMode":"classic",
+	"optimeFirst":25,
+	"optimeCall":20,
+	"optimeOutCard":20,
+	"optimeTuoguan":1,
+	"abortRestartCount":3,
+	"queue":{
+		"min":3
+	}
+}

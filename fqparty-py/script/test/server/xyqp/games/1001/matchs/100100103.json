@@ -1,0 +1,25 @@
+{
+	"displayName":"经典高级场",
+	"baseChip":2000,
+	"serviceFee":200,
+	"winloseLimit":1000,
+	"buyin":{
+		"min":80000,
+		"buyin":160000,
+		"max":-1,
+		"kickout":40000
+	},
+	"tasks":[{
+		"typeId":"playCount",
+		"kindId":"pc1",
+		"name":"6副牌",
+		"desc":"玩6局送0.3元",
+		"count":6,
+		"rewards":[
+			{
+				"assetId":"user:coupon",
+				"count":30
+			}
+		]
+	}]
+}

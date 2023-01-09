@@ -1,0 +1,35 @@
+{
+	"servers":{
+		"prefix": "ROOM",
+		"conn":{
+			"count":1,
+			"maxConnection":5000,
+			"wsoldport": 11000
+		},
+		"http":{
+			"count":1,
+			"port":10000
+		},
+		"user":{
+			"count":1
+		},
+		"room":{
+			"count":1
+		},
+		"mic":{
+			"count":1
+		}
+	},
+	"imagePrefix":"http://resource.ddyuyin.com/",
+	"keywordFilterUrl":"http://kw.fanqie.com/kwfilter",
+    "platformNotice": "平台严禁未成年人充值消费，严禁违法违规、色情低俗、诱导诈骗等行为。平台将24小时巡查，如遇到上述行为，请及时举报！",
+	"timeouts":{
+		"weakTimout":60,
+		"offlineTimeout":300
+	},
+	"heatVules": {
+		"chat": 10,
+		"member": 200
+	},
+	"phpServerUrl":"http://testapi.yinkayuyin.com"
+}

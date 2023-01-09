@@ -1,0 +1,25 @@
+{
+	"displayName":"经典初级场",
+	"baseChip":100,
+	"serviceFee":10,
+	"winloseLimit":1000,
+	"buyin":{
+		"min":0,
+		"buyin":8000,
+		"max":80000,
+		"kickout":0
+	},
+	"tasks":[{
+		"typeId":"playCount",
+		"kindId":"pc1",
+		"name":"6副牌",
+		"desc":"玩6局送0.02元",
+		"count":6,
+		"rewards":[
+			{
+				"assetId":"user:gcoin",
+				"count":2
+			}
+		]
+	}]
+}

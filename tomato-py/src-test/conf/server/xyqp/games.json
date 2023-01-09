@@ -1,0 +1,10 @@
+{
+	"games":[
+		{
+			"gameId":1002,
+			"package":"redpkg",
+			"name":"redpkg",
+			"displayName":"红包扫雷"
+		}
+	]
+}

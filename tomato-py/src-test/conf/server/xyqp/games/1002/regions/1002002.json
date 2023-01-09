@@ -1,0 +1,14 @@
+{
+	"matchType":"normal",
+	"tableCount":1,
+	"tableSeatCount":100,
+	"playMode":"classic",
+	"autoReady":1,
+	"hasRobot":0,
+	
+	"odds":1.5,
+	"commissionRatio":0.05,
+	"divisionCount":7,
+	"chipRangePerRP":[1000, 50000],
+	"roundDuration":60
+}

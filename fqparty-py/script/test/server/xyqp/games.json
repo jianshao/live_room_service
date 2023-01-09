@@ -1,0 +1,10 @@
+{
+	"games":[
+		{
+			"gameId":1001,
+			"package":"qjddz",
+			"name":"qjddz",
+			"displayName":"斗地主"
+		}
+	]
+}

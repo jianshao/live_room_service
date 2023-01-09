@@ -1,0 +1,11 @@
+http://project.muayuyin.com/index.php?m=doc&f=view&docID=510
+
+服务器重启 要删除的key
+
+del mics_info
+del room_pk_mode
+del team_pk_info
+del across_pk_info
+del online_room_user_Info*
+def online_room_user*
+def room_active_sever_list*

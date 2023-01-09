@@ -1,0 +1,62 @@
+1. 存储相关
+	用户相关
+		# 用户基础信息 User类 UserCacheDaoRedis UserDaoMysql
+		hset user:{userId} info {user_info_json}
+		# 用户session信息，保存了用户本次登录的客户端相关信息 sessionInfo是dict SessionInfoDaoRedis
+		hset user:{userId} session {user_session_info_json}
+		# 用户长连接对应的进程Id UserFrontDaoRedis
+		hset user:{userId} conn {conn_server_id}
+	
+	房间相关
+		# 房间基础信息 Room
+		hset room:{roomId} info {room_info_json}
+		# 房间状态信息 RoomStatus RoomStatusDaoRedis
+		hset room:{roomId} status {room_status_json}
+		# 房间pk信息 map<loactionId, RoomTeamPK> RoomTeamPKDaoRedis
+		hset room:{roomId} teampkinfo {room_team_pk_json}
+		# 房间麦位信息 map<micId, RoomMicStatus> RoomMicStatusDaoRedis
+		hset room_mics:{roomId} micId {room_mic_json}
+		# 房间团战pk位置信息 map<loactionId, RoomPKLocation> RoomKLocationDaoRedis
+		hset room_teampk:{roomId} loactionId {room_pklocation_json}
+		
+		hset room:{roomId} teamPkId pkId
+		
+		hset teampk:{pkId} status {teampk_status_json}
+		# 
+		zadd teampk:contribute:{pkId} {value} {userId}
+		zadd teampk:r_contribute:{pkId} {value} {userId}
+		zadd teampk:b_contribute:{pkId} {value} {userId}
+		zadd teampk:pk:{pkId} {value} {userId}
+		zadd teampk:r_pk:{pkId} {value} {userId}
+		zadd teampk:b_pk:{pkId} {value} {userId}
+		
+		hset acrosspk:{pkId} status {}
+		zadd acrosspk:{pkId}:{roomId_contribute} {value} {userId}
+		zadd acrosspk:{pkId}:{pk} {value} {userId}
+		
+	房间用户相关
+		# 房间用户状态信息 RoomUserStatus RoomUserStatusDaoRedis
+		hset room_user_status:{roomId} {userId} {room_user_status_json}
+		# 麦位房间用户状态信息 MicUserStatus MicUserStatusDaoRedis
+		# 只在麦位房间进行修改，其它进程只读
+		hset mic_user_status:{roomId} {userId} {mic_user_status_json}
+	
+	房间在线用户
+		# 进程维护的房间用户列表 member 为userId score 为roomId RoomServerOnlineUserDaoRedis
+		zadd room_server_online_users:{serverId} {roomId} {userId} 
+		# 房间在线用户列表 RoomOnlineUserListDaoRedis
+		zadd room_online_users:{roomId} {score} {userId}
+
+	mic活跃房间
+	sadd mic_server_active_room:{serverId} roomId
+
+2. 进程启动
+    Room进程启动
+	1. 加载room_server_online_users:{serverId}维护的 userId roomId列表，在内存里重新加载
+	如果是大重启应该增加参数，需要删除这些用户
+	主要用到两个类用于管理当前进程的ActiveRoom和RoomUser
+		ActiveRoomManagerImpl RoomUserManagerImpl
+
+	Mic进程启动
+	1、加载mic_server_active_room:{serverId}维护的 roomId列表，在内存里重新加载房间进程
+

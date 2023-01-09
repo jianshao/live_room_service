@@ -1,0 +1,15 @@
+{
+	"areadefs":[
+		{
+			"areaId":100200101,
+			"serverId":"MA100200101"
+		}
+	],
+	
+	"roomdefs":[
+		{
+			"roomId":10020010101,
+			"serverId":"RM10020010101"
+		}
+	]
+}

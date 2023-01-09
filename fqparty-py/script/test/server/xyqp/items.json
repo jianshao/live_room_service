@@ -1,0 +1,53 @@
+{
+	"items":[
+		{
+	        "typeId":"common.simple",
+	        "kindId":10001,
+	        "displayName":"宝箱",
+	        "pic":"http://domain/png",
+	        "units":{
+	        	"typeId":"common.count",
+	        	"displayName":"个"
+	        },
+	        "visibleInBag":1,
+	        "stackable":1,
+	        "actions":[
+	            {
+	                "typeId":"common.sale",
+	                "name":"sale",
+	                "displayName":"出售",
+	                "delivery":[
+	                	{"assetId":"user:chip", "count":100}
+	                ]
+	            }
+	        ]
+	    }
+	],
+
+	"assets":[
+		{
+	        "typeId":"user.gcoin",
+	        "kindId":"user:gcoin",
+	        "displayName":"金币",
+	        "units":"个",
+	        "pic":"http://domain/xyqp/imgs/asset/gcion.png"
+	    },
+	    {
+	        "typeId":"user.bank",
+	        "kindId":"bank:coupon",
+	        "accountId":"coupon",
+	        "displayName":"红包券",
+	        "units":"元",
+	        "pic":"http://domain/xyqp/imgs/asset/gcion.png",
+	        "displayRate":0.01
+	    },
+	    {
+	        "typeId":"user.bank",
+	        "kindId":"bank:qjddz:diamond",
+	        "accountId":"qjddz:diamond",
+	        "displayName":"钻石",
+	        "units":"个",
+	        "pic":"http://domain/xyqp/imgs/asset/gcion.png"
+	    }
+	]
+}

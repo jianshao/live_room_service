@@ -1,0 +1,883 @@
+长连接协议
+1. 客户端请求消息类型
+	request:
+		客户端请求服务器端接口需要发送request，服务器针对这个请求回应消息，就像函数调用的返回值一样
+	notify:
+		客户端发送请求到服务器端，服务器收到notify类型的消息只针对消息处理，并不对这个请求进行回应
+
+2. 客户端请求内容:
+	route:
+		字符串类型，必须
+		要请求的接口路由
+	body:
+		json字符串，必须
+		请求的消息内容
+
+3. 客户端请求消息回应
+	错误回应:
+		{
+			"ec":0, # 0或者此字段不存在表示成功, 其它表示错误码
+			"info":"错误信息", # 在ec不等于0时，次字段表示错误码
+		}
+	正确回应:
+		{
+			xxx数据
+		}
+
+4. 协议:
+	用户长连接绑定:
+		request:
+			route: /user/bind
+			body: {
+				"token":"token string",
+				"userId": 1000001,
+				"deviceInfo":{
+				    "platform": "iOS,14.4",
+				    "version": "2.5"
+				}
+			}
+
+		回应:
+			{
+				"roomId":1001 # 用户当前所在房间，是否需要断线重连/退出房间，客户端根据自己当前所在界面进行处理
+				"password":""
+			}
+
+	用户进房间:
+		请求:
+			route: /room/userEnter
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"password":
+			}
+
+		回应: 对应之前#'msgId':1001
+			{
+                "roomId":122053,
+                "userId":1151183,
+                "userLevel":1,
+                "userName":"\u7528\u6237_1151183",
+                "sex":2,
+                "avatar":"http://image2.fqparty.com/Album/1151183/1618820504711.jpg",
+                "isVip":0,
+                "prettyId":1151183,
+                "userIdentity":2,
+                "heatValue":"10",
+                "attires":[
+
+                ],
+                "dukeId":0,
+                "userCount":1,
+                "userIndex":0
+            }
+
+    用户退出房间:
+		请求:
+			route: /room/userLeave
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+			}
+
+		回应: 对应之前#'msgId':1002 踢人的msgId=9
+			{
+                "roomId":122053,
+                "userId":1151183, #退出的userId
+                "reason":1 # 退出原因 1-长链接断开 2-长链接超时 3-踢人 4-主动退出
+            }
+
+    踢用户出房间  （可能是推送的）
+    请求:
+			route: /room/kickoutUser
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+			}
+
+		回应: 对应之前#'msgId':9
+			{
+                "roomId":122053,
+                "userId":1151183, #退出的userId
+                "reason":3
+            }
+
+    锁房间:
+		请求: #对应/user/leaveMic
+			route: /room/userLeaveMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"micId":1, #麦位
+				"locked":1 #1锁 2-取消锁
+			}
+
+		回应: #对应'msgId':1008
+			{
+                "roomId":122053,
+                "isLocked":1
+            }
+
+    上麦:
+		请求: 对应/user/onMic
+			route: /room/userOnMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"micId"：
+			}
+
+		回应: #对应'msgId':1006
+			{
+                "roomId":122053,
+                "userId":1151183,
+                "microInfo":{
+                    "micId":999,
+                    "isLocked":false,
+                    "isDisabled":false,
+                    "inviteUserId":0,
+                    "inviteRoomId":0,
+                    "xinDongZhi":0,
+                    "countdownTime":"",
+                    "countdownDuration":0,
+                    "user":{
+                        "userId":1151183,
+                        "name":"用户_1151183",
+                        "userName":"18211031129",
+                        "sex":2,
+                        "userLevel":1,
+                        "avatar":"http://image2.fqparty.com/Album/1151183/1618820504711.jpg",
+                        "isVip":0,
+                        "prettyId":1151183,
+                        "prettyAvatar":"http://image2.fqparty.com/",
+                        "prettyAvatarSvga":"",
+                        "attires":[
+
+                        ],
+                        "bubble":"",
+                        "bubbleIos":"",
+                        "userAttires":[
+
+                        ],
+                        "dukeId":0
+                    },
+                    "emoticonAnimationUrl":""
+                }
+            }
+
+    下麦:
+		请求: #对应/user/leaveMic
+			route: /room/userLeaveMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+			}
+
+		回应: 对应'msgId':1007
+			{
+                "roomId":122053,
+                "micId":1, #麦位
+                "userId":1151183
+                "reason":0 #下麦的原因 0-主动下麦 1-抱下麦 2-锁麦下麦
+            }
+
+    获取用户在房间的mic
+        请求: #对应/user/checkMic
+        route: /room/getMic
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+        }
+
+        回应:
+        {
+            "roomId":1,
+            "micId":0, #0表示不在麦位上
+        }
+
+    锁麦/解除锁麦:
+		请求: #对应/user/lockMic
+			route: /room/lockMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"micId":1, #麦位
+				"locked":True #锁麦状态 True:锁麦 False:解锁
+			}
+
+		回应: #对应'msgId':1009
+			{
+                "roomId":122053,
+                "micId":1, #麦位
+                "isLocked":1
+            }
+
+	禁麦/解除禁麦:
+		请求: #对应/user/banMic
+			route: /room/disableMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"micId":1, #麦位
+				"disabled":True #禁麦状态 True:禁麦 False:不禁麦
+			}
+
+		回应: #对应'msgId':1010
+			{
+                "roomId":122053,
+                "micId":1, #麦位
+                "isLocked":1
+            }
+
+    邀请上麦/抱下麦:
+		请求: #对应/user/inviteMic
+			route: /room/inviteMic
+			body: {
+				"roomId": # 要进入房间的ID int 类型
+				"micId":1, #麦位
+				"inviteeUserId":1 #被邀请人
+				"cancel":2 0或没有 上麦；1 下麦
+			}
+
+		回应:  #对应'msgId':7 # 如果是抱下麦返回的/room/userLeaveMic
+			{
+                "roomId":122053,
+                "micId":1, #麦位
+                "userId":1 #邀请人
+                "inviteUserId":1 #受邀的玩家
+            }
+
+    开启/关闭公屏
+        请求: #对应/user/banRoomMsg
+        route: /room/disableMsg
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "userId": 哪个用户开启/关闭
+            "disabled": True: 关闭 False: 开启
+        }
+
+        回应: #对应'msgId':1011
+        {
+            "roomId":122053,
+            "userId":1,
+            "isDisabled":True: 关闭 False: 开启
+        }
+
+    设置/取消麦倒计时
+        请求: #对应/user/countdownMic
+        route: /room/countdownMic
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "userId": 哪个用户开启/关闭
+            "micId":1, #麦位
+            "cancel": #该字段是True时表示取消麦倒计时 如果不存在或者为False是设置麦倒计时
+            "duration":10 #倒计时时长 如果是设置麦倒计时需要传参
+        }
+
+        回应: #对应'msgId':1005
+        {
+            "roomId":122053,
+            "micId":1,
+            "expiresTime":100 #过期时间戳
+            "duration":13 #倒计时时间
+        }
+
+    获取房间中某个用户的信息
+        请求: #对应/user/getRoomUserInfo
+        route: /room/userInfo
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "userId":
+            "queryUserId":1, #要查询的userId
+        }
+
+        回应: #对应'msgId':3
+        {
+            "roomId":122053,
+            "isAttention":false,
+            "micId":999,
+            "isDisableMsg":false,
+            "isDisabledMicro":false,
+            "isInTheRoom":true,
+            "userIdentity":2,
+            "user":{
+                "userId":1151183,
+                "name":"\u7528\u6237_1151183",
+                "userName":"18211031129",
+                "sex":2,
+                "userLevel":1,
+                "avatar":"http://image2.fqparty.com/Album/1151183/1618820504711.jpg",
+                "isVip":0,
+                "prettyId":1151183,
+                "prettyAvatar":"http://image2.fqparty.com/",
+                "prettyAvatarSvga":"",
+                "attires":[
+
+                ],
+                "bubble":"",
+                "bubbleIos":"",
+                "userAttires":[
+
+                ],
+                "dukeId":0
+            }
+        }
+
+    获取房间中所有用户的信息
+        请求: 对应/push/getRoomUserListAll
+        route: /room/userList
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "userId":
+            "pageIndex":0, #页数 不传默认0
+            "pageNum"：20， #一页几个 不传默认20
+        }
+
+        回应: #对应'msgId':22
+        {
+            "roomId":122587,
+            "userCount":1,
+            "pageIndex":0,
+            "totalIndex":1,
+            "userList":[
+                {
+                    "micId":0,
+                    "userIdentity":0,
+                    "userId":1178493,
+                    "name":"\u60f3\u4e0e\u4f60qu\u4e70\u53ef\u4e50\ud83d\ude48",
+                    "sex":1,
+                    "userLevel":26,
+                    "avatar":"http://image2.fqparty.com/1178493/20210106164723.gif",
+                    "isVip":0,
+                    "prettyId":1178493,
+                    "dukeId":2,
+                    "clientInfo":{
+                        "platform": "Android,GW",
+			            "version": "3.0.4"
+                    }
+                }
+            ]
+        }
+
+    获取房间中前三名用户的信息
+        请求: 对应/push/getRoomUserListThree
+        route: /room/userListThree
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "userId":
+            "num":3, #前几名 不传默认3
+        }
+
+        回应: #对应'msgId':21
+        {
+            "roomId":122587,
+            "userCount":1,
+            "userList":[
+                {
+                    "micId":0,
+                    "userIdentity":0,
+                    "userId":1178493,
+                    "name":"\u60f3\u4e0e\u4f60qu\u4e70\u53ef\u4e50\ud83d\ude48",
+                    "sex":1,
+                    "userLevel":26,
+                    "avatar":"http://image2.fqparty.com/1178493/20210106164723.gif",
+                    "isVip":0,
+                    "prettyId":1178493,
+                    "dukeId":2,
+                    "clientInfo":{
+                        "platform": "Android,GW",
+			            "version": "3.0.4"
+                    }
+                }
+            ]
+        }
+
+    发送消息到房间
+        请求: #对应/push/pushRoom
+        route: /room/sendMsgToRoom
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "msgType": #1-文字 2-动画表情
+            "msg":msg
+        }
+
+        回应: #对应'msgId':1003
+        {
+            "roomId":122587,
+            "fromUserId":1,
+            "fromUserName":122587,
+            "micId":1, #msgType为2才有此字段
+            "emoticonUrl":#msgType为2才有此字段
+            "msgType":msgType,
+            "msg":msg,
+            "fromUser":{
+                        "userId":1178493,
+                        "name":"\u60f3\u4e0e\u4f60qu\u4e70\u53ef\u4e50\ud83d\ude48",
+                        "userName":"15210147071",
+                        "sex":1,
+                        "userLevel":26,
+                        "avatar":"http://image2.fqparty.com/1178493/20210106164723.gif",
+                        "isVip":0,
+                        "prettyId":1178493,
+                        "prettyAvatar":"",
+                        "prettyAvatarSvga":"http://image2.fqparty.com/attire/20210202/b00185d40dceda89c3e1510bfb369372.svga",
+                        "attires":[
+
+                        ],
+                        "bubble":"",
+                        "bubbleIos":"",
+                        "userAttires":[
+
+                        ],
+                        "dukeId":2
+                    }
+        }
+
+    给用户发送房间信息
+        请求: #对应/push/getRoomInfo
+        route: /room/roomInfo
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+        }
+
+        回应: #对应'msgId':2
+        {
+            "count":1,
+            "balance":0,
+            "userIdentity":0,
+            "isDisableMsg":false,
+            "modeName":"\u4ea4\u53cb",
+            "roomData":{
+                "id":122587,
+                "prettyId":122587,
+                "ownerUserId":1028705,
+                "roomName":"\u6211\u7838\u86cb\u4f60\u6392\u6321\uff0c\u665a\u4e0a\u4e00\u8d77\u7761\u5730\u677f\uff01",
+                "roomDesc":"\u5565\u4e5f\u4e0d\u4f1a\uff0c\u5c31\u7838\u86cb\u3002\u4f60\u8981\u7684\u90fd\u6709\uff0c\u6211\u4e0d\u4f1a\u7684\u4f60\u6765\u6559",
+                "roomImage":"http://image.muayuyin.com/background_image/20201102/b44f557d84ef0ac894bf9cc8b3e8c647.png",
+                "roomWelcomes":"\u89c2\u81ea\u5728 \u5e38\u611f\u6069\u3002\u6765\u4e86\u5c31\u7559\u4e0b\uff0c\u5916\u9762\u51b7\uff01",
+                "roomType":9,
+                "roomMode":1,
+                "roomLock":false,
+                "roomDisableMsg":false,
+                "roomPassWord":"0",
+                "modeName":"\u4ea4\u53cb",
+                "isWheat":0,
+                "ModeId":9,
+                "ModePid":1,
+                "guildId":0
+            },
+            "microInfos":[
+                {
+                    "micId":999,
+                    "isLocked":false,
+                    "isDisabled":false,
+                    "inviteUserId":0,
+                    "countdownTime":"",
+                    "countdownDuration":0,
+                    "user":null, #跟上面的其他user参数一样
+                    "emoticonAnimationUrl":""
+                },
+                {
+                    "micId":1,
+                    "isLocked":false,
+                    "isDisabled":false,
+                    "inviteUserId":0,
+                    "inviteRoomId":0,
+                    "xinDongZhi":0,
+                    "countdownTime":"",
+                    "countdownDuration":0,
+                    "user":null,
+                    "emoticonAnimationUrl":""
+                }
+            ],
+            "microOrders":null,
+            "ranks":null,
+            "tips":"",
+            "roomOwnerNickName":"\u65e0\u53ef\u66ff\u4ee3",
+            "roomOwnerHeadUrl":"http://image2.fqparty.com/Album/1028705/1616005903951.jpg",
+            "isAttentionRoomOwner":false,
+            "hammers":0,
+            "coloredHammers":0,
+            "heatValue":"10",
+            "canBreakEgg":false,
+            "heartbeatInterval":6,
+            "heartbeatTimeOutCount":3
+        }
+
+    同步音乐数据
+        请求: #对应/user/syncMusicData
+        route: /room/syncMusic
+        body: {
+            "roomId": # 要进入房间的ID int 类型
+            "msg": {
+                'musicId':musicId,
+                'status':status,
+                'volume':volume,
+                'playerUserId':userId
+            }
+        }
+
+        回应: #对应msgId：1015
+        {
+            "roomId":1,
+            "music":{ #如果没有音乐数据则为None
+                'musicId':musicId,
+                'status':status,
+                'volume':volume,
+                'playerUserId':userId
+            }
+        }
+
+    更新用户数据 （不知道哪用，如果没用忽略）
+        请求:
+        route: /room/userInfoUpdate
+        body: {
+            "userId": 10001
+        }
+
+        回应: #对应msgId：1013
+        {
+            "roomId":1,
+            "user":#跟上面user一样
+        }
+
+    弱网：
+        推送: #对应'msgId':1012
+        route: /room/userWeakNet
+        body: {
+            "roomId":122053,
+            "micId":1, #麦位
+            "weakNetwork":True
+        }
+
+    更新房间数据
+        推送:
+        可能会清麦 主动推送/room/userLeaveMic
+        可能会音乐变化 主动推送/room/syncMusic
+
+    广播数据给玩家
+        推送：
+        route: /room/broadcastMsgToUser
+        body: {
+            "msg": msg #msg的内容跟之前的一致  msgId有：2052
+        }
+
+    广播数据给房间
+        推送： #对应'msgId': 10003
+        route: /room/broadcastMsgToRoom
+        body: {
+            "roomId":roomId
+            "msg": msg #msg的内容跟之前的一致  msgId有：2051、2050、2088、2085、37、2086、2087、2070、2080、2031、
+            2055、2089、2053、2052、2030、2083、2082、2054
+        }
+
+    2031 热度值变化
+    {
+        "roomId": 122,
+        "msg": {"msgId":2031, "VisitorNum":111} //VisitorNum 热度值
+    }
+    2051 房间背景变化
+    {
+        "roomId": 122,
+        "msg": {"msgId":2051, "room_bg":"http://***"}
+    }
+    2050 修改房间类型
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2050,
+            "room_name": "\网\恋\不\奔\现",
+            "room_desc": "\网\恋\不\奔\现",
+            "room_welcomes": "\网\恋\不\奔\现",
+            "modeName": "\网\恋\不\奔\现",
+            "isChangeRoom": 1,
+            "ModeId": 1223,
+            "ModePid": 1317
+        }
+    }
+    37 麦位心动值变化
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 37,
+            "HeartValueList": [
+                {
+                    "micId":999,
+                    "HeartValue":13
+                }
+            ]
+        }
+    }
+    2088 矿石兑换飘屏
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2088,
+            "items": {
+                "userId":999,
+                "nickName": 123,
+                "prettyId":13,
+                "userLevel":1,
+                "isVip": 1,
+                "dukeId":2,
+                "showType":1, //1公屏 2飘屏
+                "gift_name":"",
+                "gift_image":"http://***",
+                "gift_num":1
+            }
+        }
+    }
+    2085 淘金之旅跑马灯
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2085,
+            "items": {
+                "content": "恭喜**用户在淘金之旅活动中获得了3434豆"
+            }
+        }
+    }
+    2086 爵位等级变化
+    {
+        "roomId": 122
+        "msg": {
+            "msgId": 2086,
+            "dukeSvga":"http://***",
+            "showType":1, //1公屏 2飘屏
+            "roomId":11, //飘屏为0
+            "user": {
+                "userId":999,
+                "nickName": 123,
+                "prettyId":13,
+                "userLevel":1,
+                "isVip": 1,
+                "dukeId":2
+            }
+        }
+    }
+    2087 买vip
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2087,
+            "items": {
+                "userId":999,
+                "nickName": 123,
+                "prettyId":13,
+                "userLevel":1,
+                "isVip": 1,
+                "dukeId":2，
+                "vipType":1， //1续费 2开通激活
+                "showType":0  // 0飘屏 1公屏
+            }
+        }
+    }
+    2070 砸蛋飘屏
+    {
+        "roomId": 122
+        "msg": {
+            "msgId": 2070,
+            "items": {
+                "userId":999,
+                "userIdentity":1,
+                "nickName": 123,
+                "prettyId":13,
+                "userLevel":1,
+                "isVip": 1,
+                "showType":1,
+                "roomName":""
+                "giftId":1,
+                "giftName":"",
+                "giftUrl":"http://***",
+                "count":1,
+                "attires": [] #null 或者 []
+            }
+        }
+    }
+    2080 发红包
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2080,
+            "roomId": 124201,
+            "roomName": "\网\恋\不\奔\现",
+            "userIdentity": 0,
+            "prettyId": 1451244,
+            "userId": 1451244,
+            "userLevel": 1,
+            "nickName": "ndjdn",
+            "redPacketId": 1317,
+            "imageUrl": "http:\/\/image2.fqparty.com\/image\/testtxk\/ic_red_envelope.png",
+            "isVip": 0,
+            "attires": null,
+            "showType": 2,
+            "showTime": 10
+        }
+    }
+
+    2055 管理员加减
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2055,
+            "roomId": 124201,
+            "UserId": 1451244,
+            "UserLevel": 1,
+            "Name": "ndjdn",
+            "RoomGuardLevel":4,
+            "IsManager":1,
+            "VipLevel": 0
+        }
+    }
+    2089 三人夺包
+    {
+        "roomId": 122
+        "msg": {
+            "msgId": 2089,
+            "items": {
+                "userId":999,
+                "nickName": 123,
+                "prettyId":13,
+                "userLevel":1,
+                "isVip": 1,
+                "dukeId":1,
+                "typeId":1,
+                "showType":1, // 0飘屏 1公屏
+                "giftName":"",
+                "giftImage":"http://***",
+                "giftCount":1,
+            }
+        }
+    }
+    2053 关注房间
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2053,
+            "description":"attention",
+            "uid": 1451244,
+            "level": 1,
+            "nickname": "ndjdn",
+            "prettyid":1,
+            "isVip": 0
+        }
+    }
+    2052 拉黑用户
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2052,
+            "items": {
+                "content": "用户%s被用户%s永久踢出房间"
+            }
+        }
+    }
+    2030 送礼物
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2030,
+            "roomId":23434,
+            "RoomName":"",
+            "VisitorNum":"",
+            "Count":2,
+            "GiftId":123,
+            "GiftData":{
+                "Name": "",
+                "Image": "http://",
+                "GiftAnimation": "http://",
+                "Animation":"http://",
+                "ClassType":1
+            },
+            "GiftGiver":{
+                "UserId": 1451244,
+                "UserLevel": 1,
+                "Name": "ndjdn",
+                "HeadImageUrl":"http://",
+                "PrettyId":1,
+                "isVip": 0,
+                "userIdentity":1,
+                "attires":[]
+            },
+            "GiveGiftDatas":[
+                {
+                    "micId":1,
+                    "TargetName":1, #userName
+                    "TargetHeadImageUrl":"http://", //user图像
+                    "isVip":1
+                }
+            ]
+        }
+    }
+    2083 送礼物 礼盒盒子飘屏
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2083,
+            "roomName":"",
+            "count":2,
+            "giftId":123,
+            "giftName": "",
+            "giftUrl": "http://",
+            "userId": 1451244,
+            "userLevel": 1,
+            "nickName": "ndjdn",
+            "prettyId":1,
+            "isVip": 0,
+            "userIdentity":1
+        }
+    }
+    2082 送礼物 礼盒盒子公屏
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2082,
+            "boxCount":2,
+            "user":{
+                "userId": 1451244,
+                "userLevel": 1,
+                "nickName": "ndjdn",
+                "prettyId":1,
+                "isVip": 0,
+                "userIdentity":1
+            },
+            "items":[
+                {
+                    "roomName":"",
+                    "showType":1，
+                    "giftId":123,
+                    "giftName": "",
+                    "giftUrl": "http://",
+                    "count":1
+                }
+            ]
+        }
+    }
+    2054 送礼物 大礼物全服飘屏
+    {
+        "roomId": 122,
+        "msg": {
+            "msgId": 2054,
+            "roomId":23434,
+            "RoomName":"",
+            "VisitorNum":"",
+            "Count":2,
+            "GiftId":123,
+            "GiftData":{
+                "Name": "",
+                "Image": "http://",
+                "GiftAnimation": "http://",
+                "Animation":"http://",
+                "ClassType":1
+            },
+            "GiftGiver":{
+                "UserId": 1451244,
+                "UserLevel": 1,
+                "Name": "ndjdn",
+                "HeadImageUrl":"http://",
+                "PrettyId":1,
+                "isVip": 0,
+                "userIdentity":1,
+                "attires":[]
+            },
+            "GiveGiftDatas":[
+                {
+                    "micId":1,
+                    "TargetName":1, #userName
+                    "TargetHeadImageUrl":"http://", //user图像
+                    "isVip":1
+                }
+            ]
+        }
+    }

@@ -1,0 +1,155 @@
+
+
+团战pk：
+    pk坑位 11/12/13/14/15/16/17/18  红队：11/12/13/14 蓝队：15/16/17/18
+
+    RoomPKLocation：pk位坑位对象，类似RoomMic麦位
+    class RoomPKLocation(object):
+        def __init__(self, activeRoom, location):
+            # 所属房间
+            self.activeRoom = activeRoom
+            # pk的坑位
+            self.location = location
+            # 当前房间里的真实麦位
+            self.roomMic = None
+            # 是否锁麦
+            self.locked = False
+            # 是否禁麦
+            self.disabled = False
+            # 邀请的玩家ID
+            self.inviteUserId = 0
+            self.inviteRoomId = 0
+
+    RoomPK: 团战pk对象，处理pk开始、结束、加时,送礼物数据处理，如果房间的RoomPK不为空，说明是团战状态
+    class RoomPK(object):
+        def __init__(self, activeRoom):
+            # 所属房间
+            self.activeRoom = activeRoom
+            # pk惩罚描述
+            self.punishment = None
+            # 开始时间
+            self.startTime = 0
+            # 倒计时时间
+            self.countdown = 0
+
+            self.redLocationIDs = [11,12,13,14]
+            self.blueLocationIDs = [15, 16, 17, 18]
+
+            # pk坑位列表map<micId, RoomMic>
+            self.pkLocationList = [RoomPKLocation(self, location) for location in [11, 12, 13, 14, 15, 16, 17, 18]]
+            self.pkLocationMap = {pkLocation.location: pkLocation for pkLocation in self.pkLocationList}
+
+            # 贡献榜 团战期间送礼物人的统计map(userId, 贡献值) 红队vs蓝队
+            self.redContributeMap = {}
+            self.blueContributeMap = {}
+
+            # pk值榜 收礼物人的统计map(userId, pk值) 红队vs蓝队
+            self.redPKMap = {}
+            self.bluePKMap = {}
+
+            # 是否结束
+            self._isFinish = False
+            # pk的timer
+            self._pkTimer = None
+
+    麦位处理：
+        玩家上麦、下麦、抱上下麦， 变化的是RoomPKLocation的roomMic 上麦时roomMic存在 下麦时为空
+        玩家禁麦、锁麦， 处理的时的是RoomPKLocation的状态，只有pk坑位上的麦位存在时才处理房间真实麦位上的逻辑
+        协议上玩家上麦、下麦、抱上下麦、锁麦、禁麦协议只需求传loaction(坑位置，位置有11-18)，广播的用户的协议同样有loaction
+
+    数据处理：
+        User对象上新增
+        # 累计pk值
+        self.totalPkValue = 0
+        # 累计贡献值
+        self.totalContributeValue = 0
+
+        redContributeMap、blueContributeMap、redPKMap、bluePKMap是数据统计，pk值和贡献值的数据存内存中，服务器重启时，团战pk数据清空
+
+    送礼物：
+        所有的数据都是送礼产生的，本房间处理2030的php协议，送礼协议处理分别处理(红队/蓝队)送礼人累加贡献值、收礼人累加PK值、麦上人加pk值
+
+
+跨房pk
+
+对象：
+    class AcrossPK(object):
+        '''创建或发起一个pk'''
+        def __init__(self, createRoomId=0, pkRoomId=0, punishment='', createTime=0, countdown=0, roomName='', userName='', userAvater=''):
+            # 发起pk
+            self.createRoomId = createRoomId
+            # 被pk
+            self.pkRoomId = pkRoomId
+            # 发起pk的房间名称
+            self.roomName = roomName
+            # 发起pk的房主的信息
+            self.userName = userName
+            # 发起房间的房主的信息
+            self.userAvater = userAvater
+            # pk惩罚描述
+            self.punishment = punishment
+            # 创建时间
+            self.createTime = createTime
+            # 倒计时时间
+            self.countdown = countdown
+
+    class RoomAcrossPK(object):
+        '''pk开始时数据'''
+        def __init__(self, activeRoom, acrossPK, startTime):
+            # 所属房间
+            self.activeRoom = activeRoom
+            # 创建的pk
+            self.acrossPK = acrossPK
+            # 与本房间pk的房间信息
+            self.pkRoomId = acrossPK.pkRoomId if acrossPK.createRoomId == self.activeRoom.roomId else acrossPK.createRoomId
+            self.pkRoomName = ''
+            self.pkUserName = ''
+            self.pkUserAvater = ''
+            # pk惩罚描述
+            self.punishment = acrossPK.punishment
+            # 开始时间
+            self.startTime = startTime
+            # 倒计时时间
+            self.countdown = acrossPK.countdown
+
+            # 贡献榜 团战期间送礼物人的统计map(userId, 贡献值) 红队vs蓝队 默认创建pk的房间视为红队
+            self.contributeMap = {}
+            self.contributeMap[acrossPK.createRoomId] = {}
+            self.contributeMap[acrossPK.pkRoomId] = {}
+
+            # pk值榜 收礼物人的统计map(userId, pk值) 红队vs蓝队
+            self.pkMap = {}
+            self.pkMap[acrossPK.createRoomId] = {}
+            self.pkMap[acrossPK.pkRoomId] = {}
+
+            # 是否结束
+            self._isFinish = False
+            # pk的timer
+            self._pkTimer = None
+
+            fqparty.app.utilService.clearAcrossPK(self.activeRoom.roomId)
+
+逻辑处理：
+    一个房间只能创建一次pk
+    一个房间可以发起多个pk：A对B发起pk后，B不可以对A发起pk，A发起的pk不论B接受或不接受，1分钟后过期，如果拒绝直接过期。
+    一个房间接受pk(pk有两个地方：1-别人创建的pk 2-别人发起的pk)，通知另一个房间pk开始，如果另一个房间不活跃，要使其活跃。
+
+    pk开始，不论房间有没有人，房间必须活跃，5s的timer检查没人没有pk的房间。所有的数据都是送礼产生的，本房间处理2030的php协议，
+    送礼协议处理分别处理(红队/蓝队)送礼人累加贡献值、收礼人累加PK值。A房间数据处理之后要同步给B房间。A和B各自处理自己的pk，
+    A或B有一个房间pk结束之后，送礼均不产生数据
+
+
+redis数据处理：
+    创建的pk hash （一个房间只能创建一条）
+    create_across_pk
+    创建房间Id:{"roomId":1323, "createTime":0, "countdown":100, "punishment":112}
+
+    被发起的pk的列表 hash （一个房间可以被多个房间发起）
+    sponsored_across_pk:(被发起的房间id)
+    发起房间Id:{"roomId":1323, "pkRoomId":1323,"createTime":0, "countdown":100, "punishment":112}
+
+    pk的数据 hash
+    across_pk_data:roomId
+    finish:2 是否结束
+
+

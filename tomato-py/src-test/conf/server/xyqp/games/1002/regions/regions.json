@@ -1,0 +1,10 @@
+{
+	"regions":[
+		{
+			"regionId":1002001,
+			"areaCount":2,
+			"roomCountPerArea":1,
+			"tableCountPerRoom":100
+		}
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"sdkUrl":"http://127.0.0.1:8000",
+	"mode":"dev",
+	"servers":{
+		"conn":{
+			"count":2,
+			"maxConnection":5000,
+			"tcpport":9100,
+			"wsport":9200
+		},
+		"http":{
+			"count":2,
+			"port":9000
+		},
+		"user":{
+			"count":2
+		}
+	}
+}

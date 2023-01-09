@@ -1,0 +1,10 @@
+{
+	"log":{
+		"level":30
+	},
+	"conn":{
+		"emptyTimeout":10,
+		"heartTimeout":30,
+		"checkInterval":6
+	}
+}

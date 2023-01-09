@@ -1,0 +1,46 @@
+用户行为:
+
+		
+用户当前房间
+	hset user_current_room {userId} {roomId}
+
+
+房间是否踢出用户
+	exists room_user_kickout_{roomId}_{userId}
+
+房间密码
+	get room_lock_{roomId}
+
+房间热度
+	
+	公会房
+		hincrby room_gift_hot_num_guild {roomId} {heatScore}
+	普通房
+		hincrby room_gift_hot_num_index {roomId} {heatScore}
+
+	热度值变化:
+		用户进房间
+			公会房
+				增加 进房间用户的userLevel * 100 + 1000
+			普通房
+				增加 1000
+		
+		用户退房间
+			公会房
+				减少 进房间用户的userLevel * 100 + 1000
+			普通房
+				减少 1000
+	
+房间列表
+	房间活跃时
+		sadd go_room_list {roomId}
+	房间不活跃时(人数为0时)
+		srem go_room_list {roomId}
+		
+麦位心动值
+	hset micCharm_{roomId} {micId} heartValue
+
+
+
+
+	

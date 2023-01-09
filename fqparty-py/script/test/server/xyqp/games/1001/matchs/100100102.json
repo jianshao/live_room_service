@@ -1,0 +1,25 @@
+{
+	"displayName":"经典中级场",
+	"baseChip":500,
+	"serviceFee":50,
+	"winloseLimit":1000,
+	"buyin":{
+		"min":20000,
+		"buyin":40000,
+		"max":350000,
+		"kickout":10000
+	},
+	"tasks":[{
+		"typeId":"playCount",
+		"kindId":"pc1",
+		"name":"6副牌",
+		"desc":"玩6局送0.1元",
+		"count":6,
+		"rewards":[
+			{
+				"assetId":"user:gcoin",
+				"count":10
+			}
+		]
+	}]
+}
