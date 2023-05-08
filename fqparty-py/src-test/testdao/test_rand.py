@@ -12,7 +12,7 @@ def test():
     for _ in xrange(10):
         ret.append(random.randint(1, 10))
         
-    print ret
+    print(ret)
     
 if __name__ == '__main__':
     for _ in xrange(10):

@@ -24,13 +24,13 @@ def main():
     redis = yield clientCreator.connectTCP(HOST, PORT)
 
     res = yield redis.ping()
-    print res
+    print(res
 
     res = yield redis.set('test', 42)
-    print res
+    print(res
 
     test = yield redis.get('test')
-    print res
+    print(res
 
 @endcode
 

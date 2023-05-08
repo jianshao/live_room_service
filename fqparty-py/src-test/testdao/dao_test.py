@@ -17,7 +17,7 @@ def main():
     dao = ActiveUserDaoRedis([conn])
     serverId = 'US000001'
     dao.saveActiveUser(serverId, ActiveUser(10001, int(time.time())))
-    print dao.loadAllActiveUser('US000001')
+    print(dao.loadAllActiveUser('US000001'))
     mainloop.stop()
 
 if __name__ == '__main__':

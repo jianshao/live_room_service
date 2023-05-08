@@ -39,7 +39,7 @@ def _popen_process_while1(pypy, deployPath, appModule, configPathOrConfigRedis, 
     os.chmod(while1, 00777)
     cmd = '%s %s %s %s %s %s %s %s' % (
         while1, pypy, run, serverId, appModule, configPathOrConfigRedis, logsPath, isReload)
-    print '>>> run cmd %s' % (cmd)
+    print('>>> run cmd %s' % (cmd))
     subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True, env=env)
 
 
@@ -54,7 +54,7 @@ def start_server(pypy, deployPath, appModule, configPathOrConfigRedis, serverId)
     pythonPath += ':%s' % (os.path.join(deployPath, 'bin'))
     env['PYTHONPATH'] = pythonPath
     cmd = 'nohup %s %s %s %s %s %s' % (pypy, run, serverId, appModule, configPathOrConfigRedis, logsPath)
-    print '>>> run cmd %s' % (cmd)
+    print('>>> run cmd %s' % (cmd))
     subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True, env=env)
 
 
@@ -93,11 +93,11 @@ def get_pids(pypy, deployPath, appModule, configPathOrConfigRedis, isReload, ser
 
 
 def stop_servers(pypy, deployPath, appModule, configPathOrConfigRedis, isReload, serverIds):
-    print 'stop servers', serverIds
+    print('stop servers', serverIds)
     pids = get_pids(pypy, deployPath, appModule, configPathOrConfigRedis, isReload, serverIds)
     for serverId, p in pids:
         try:
-            print 'kill pid', serverId, p.pid
+            print('kill pid', serverId, p.pid)
             p.kill()
         except:
             traceback.print_exc()
@@ -156,10 +156,10 @@ def tar_xvf(tarfilepath, out_dir, sub_dir, rmLeft):
 
 
 def do_command_xvf(*args):
-    print 'do_command_xvf', args
+    print('do_command_xvf', args)
     if len(args) < 4:
-        print args
-        print 'remote.py xvf <tarfilepath> <out_dir> <sub_dir> <rmLeft>'
+        print(args)
+        print('remote.py xvf <tarfilepath> <out_dir> <sub_dir> <rmLeft>')
         exit(-1)
     tar_xvf(args[0], args[1], args[2], args[3])
 
@@ -167,8 +167,8 @@ def do_command_xvf(*args):
 def do_command_start_servers(*args):
     #     pypy, deployPath, appModule, redisConf, serverIds
     if len(args) < 5:
-        print args
-        print 'remote.py start <pypy> <deployPath> <appModule> <configPath> [serverIds...]'
+        print(args)
+        print('remote.py start <pypy> <deployPath> <appModule> <configPath> [serverIds...]')
         exit(-1)
     pypy = args[0]
     deployPath = args[1]
@@ -177,14 +177,14 @@ def do_command_start_servers(*args):
     isReload = args[4]
     serverIds = args[5:]
 
-    print 'do_command_start_servers', args
+    print('do_command_start_servers', args)
     start_servers(pypy, deployPath, appModule, configPath, isReload, serverIds)
 
 
 def do_command_stop_servers(*args):
     if len(args) < 5:
-        print args
-        print 'remote.py stop <pypy> <deployPath> <appModule> <configPath> [serverIds...]'
+        print(args)
+        print('remote.py stop <pypy> <deployPath> <appModule> <configPath> [serverIds...]')
         exit(-1)
     pypy = args[0]
     deployPath = args[1]
@@ -193,7 +193,7 @@ def do_command_stop_servers(*args):
     isReload = args[4]
     serverIds = args[5:]
 
-    print 'do_command_stop_servers'
+    print('do_command_stop_servers')
 
     stop_servers(pypy, deployPath, appModule, configPath, isReload, serverIds)
 

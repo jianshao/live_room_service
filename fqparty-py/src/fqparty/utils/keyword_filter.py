@@ -158,7 +158,7 @@ if __name__ == '__main__':
         sys.setdefaultencoding("utf-8")
     kf = KeywordFilter()
     kf.loadFromFile('./keywords.txt', 'utf8')
-    print 'filter=', kf.replace('我们来裸 聊啦哈哈')
+    print('filter=', kf.replace('我们来裸 聊啦哈哈'))
     
     
 

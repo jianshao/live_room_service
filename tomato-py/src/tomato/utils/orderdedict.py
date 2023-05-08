@@ -50,5 +50,5 @@ if __name__ == '__main__':
     od['3'] = curTime + 3
     od['1'] = curTime + 1
     for k, v in od.iteritems():
-        print k, v
+        print(k, v)
     

@@ -36,12 +36,12 @@ def testOrderDict():
         session = d[sids[i]]
         d[session.sid] = session
     et = time.time()
-    print 'used', et - st
+    print('used', et - st)
     st = time.time()
     for _ in d.values():
         kick()
     et = time.time()
-    print 'used', et - st
+    print('used', et - st)
         
         
 if __name__ == '__main__':

@@ -353,6 +353,6 @@ class TTHttpClient(object):
 
 if __name__ == '__main__':
     resp = TTHttpClient.get('https://testgosocket.fqparty.com/ws')
-    print resp
+    print(resp)
 
 

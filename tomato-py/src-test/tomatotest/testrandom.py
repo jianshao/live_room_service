@@ -70,10 +70,10 @@ if __name__ == '__main__':
     for _ in xrange(1):
         res = test(random2, giftsConf, count)
         sortedRes = sorted(res, key=lambda giftV: (giftV[0]['weight'], giftV[0]['giftId']))
-        print 'new', [(v[0]['giftId'], v[1], '%.5f%%' % (float(v[0]['weight']) / totalWeight * 100), '%.5f%%' % (float(v[1]) / count * 100)) for v in sortedRes]
+        print('new', [(v[0]['giftId'], v[1], '%.5f%%' % (float(v[0]['weight']) / totalWeight * 100), '%.5f%%' % (float(v[1]) / count * 100)) for v in sortedRes])
     for _ in xrange(1):
         res = test(random1, giftsConf, count)
         sortedRes = sorted(res, key=lambda giftV: (giftV[0]['weight'], giftV[0]['giftId']))
-        print 'old', [(v[0]['giftId'], v[1], '%.5f%%' % (float(v[0]['weight']) / totalWeight * 100), '%.5f%%' % (float(v[1]) / count * 100)) for v in sortedRes]
+        print('old', [(v[0]['giftId'], v[1], '%.5f%%' % (float(v[0]['weight']) / totalWeight * 100), '%.5f%%' % (float(v[1]) / count * 100)) for v in sortedRes])
 
 

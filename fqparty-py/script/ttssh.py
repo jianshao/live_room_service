@@ -122,7 +122,7 @@ def connect(options):
         if ssh:
             return ssh
         sshClient = _connect(options)
-        print 'sshClient=', sshClient
+        print('sshClient=', sshClient)
         sshFTP = sshClient.open_sftp()
         ssh = TTSSH(options['ip'], sshClient, sshFTP)
         _SSH_CLIENTS[options['ip']] = ssh
@@ -131,28 +131,28 @@ def connect(options):
         if sshClient:
             sshClient.close()
         if sshFTP:
-            sshFTP.close();
+            sshFTP.close()
         raise
 
 def execute_command_local(cmdline):
-    print 'execute_command_local', ' '.join(cmdline)
+    print('execute_command_local', ' '.join(cmdline))
     p = subprocess.Popen(cmdline, stdout=subprocess.PIPE)
-    print p.communicate()[0]
+    print(p.communicate()[0])
 
 def execute_command_remote(machine, cmdline):
-    print 'execute_command_remote', machine['ip'], ' '.join(cmdline)
+    print('execute_command_remote', machine['ip'], ' '.join(cmdline))
     ssh = ttssh.connect(machine)
     res = ssh.exec_command(' '.join(cmdline), getPty=False)
-    print res
+    print(res)
     
 # #     child1 = psutil.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 #     psutil.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-# #     print p.communicate()[0]
+# #     print(p.communicate()[0]
 # #     s1, s2 = p.communicate()
 # #     outputs = s1 + '\n' + s2
 # #     lines = outputs.split('\n')
 # #     for x in xrange(len(lines)) :
-# #         print lines[x]
+# #         print(lines[x]
 
 
 if __name__ == '__main__':
@@ -164,15 +164,15 @@ if __name__ == '__main__':
         'user':user,
         'keyfile':keyfile
     })
-    print 'ssh=', s
-    print s.exec_command('ls', getPty=True)
+    print('ssh=', s)
+    print(s.exec_command('ls', getPty=True))
 
 #     
 #     stdin, stdout, stderr = s.execCommand('sudo su - xingyue', getPty=True)
 #     stdin.write('pwd' + '\n')
 #     for line in stdout:
-#         print line.strip('\n')
+#         print(line.strip('\n')
     
-    print s.exec_command('ls', getPty=True)
+    print(s.exec_command('ls', getPty=True))
     
 

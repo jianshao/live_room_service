@@ -85,6 +85,6 @@ if __name__ == '__main__':
     cache.set('key1', 1)
     cache.set('key2', 2)
     cache.get('key1')
-    print cache._cache.frontitem()
+    print(cache._cache.frontitem())
 
 

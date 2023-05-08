@@ -13,7 +13,7 @@ import subprocess
 
 
 def load_json_file(filePath, encoding='utf8'):
-    print 'load_json_file', filePath
+    print('load_json_file', filePath)
     with codecs.open(filePath, 'r', encoding) as f:
         return json.load(f)
 
@@ -61,7 +61,7 @@ def get_local_machine_ips():
     
     if not iplist:
         iplist.append('127.0.0.1')
-    print 'get_local_machine_ips system=', curplatform, 'iplist=', iplist
+    print('get_local_machine_ips system=', curplatform, 'iplist=', iplist)
     return iplist
 
 

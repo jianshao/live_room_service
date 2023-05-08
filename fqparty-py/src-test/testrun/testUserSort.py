@@ -47,12 +47,12 @@ def main():
         sortedlist.insert(userList, roomUser)
         
     l = [(roomUser.user.userId, roomUser.sortScore) for roomUser in userList]
-    print sortedlist.indexOf(userList, userList[0])
-    print sortedlist.indexOf(userList, userList[1])
-    print l
+    print(sortedlist.indexOf(userList, userList[0]))
+    print(sortedlist.indexOf(userList, userList[1]))
+    print(l)
     sortedlist.remove(userList, userList[0])
     l = [(roomUser.user.userId, roomUser.sortScore) for roomUser in userList]
-    print l
+    print(l)
 
 
 if __name__ == '__main__':

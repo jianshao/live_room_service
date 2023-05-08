@@ -23,13 +23,13 @@ def main(count):
         md5str = strutil.md5Digest(uuidstr)
         md5list.add(md5str)
         if len(md5list) > 1:
-            print 'error'
+            print('error')
         
 
 def calc(price, gifts):
     values = [gift / float(price) for gift in gifts]
     valueSum = sum(values)
-    print values, valueSum
+    print(values, valueSum)
     rets = [(1 - (float(v))) if v < 1 else float(v) / valueSum for v in values]
     sumRets = sum(rets)
     rets1 = [v / sumRets for v in rets]
@@ -39,23 +39,23 @@ def calc(price, gifts):
 def testString(keyword):
     d = {'key':keyword}
     keyword += 'haha'
-    print keyword
-    print d['key']
+    print(keyword)
+    print(d['key'])
 
 if __name__ == '__main__':
     try:
         keyword = 'hello'
         testString(keyword)
         s = unichr(11)
-        print 'unichr11=[%s]' % s, len(s)
+        print('unichr11=[%s]' % s, len(s))
         for w in keyword:
-            print '[%s]' % (w)
+            print('[%s]' % (w))
 #         price = 7
 #         gifts = [1, 5, 8]
 #         rets, rets1, total = calc(price, gifts)
-#         print rets, rets1, total
+#         print(rets, rets1, total
 #         vs = [rets1[i] * 200 * gifts[i] for i in xrange(len(rets1))]
-#         print vs, sum(vs)
+#         print(vs, sum(vs)
     except:
         traceback.print_exc()
         

@@ -19,7 +19,6 @@ from tomato.utils.ttlog import _Formatter
 
 def main(serverId, configFilePath):
     try:
-        print '>>> mmain'
         # 初始化log
         filehandler = TimedRotatingFileHandler('%s/%s.log' % ('./', serverId), when='MIDNIGHT', interval=1, backupCount=3)    
         # 设置后缀名称，跟strftime的格式一样  
@@ -46,7 +45,7 @@ def main(serverId, configFilePath):
 
 
 def run(serverId, configFilePath):
-    print '>>> run', serverId, configFilePath
+    print('>>> run', serverId, configFilePath)
     mainloop.run(main, serverId, configFilePath)
 
 

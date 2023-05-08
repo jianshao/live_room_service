@@ -9,8 +9,8 @@ from tomato.db import redis
 
 def main():
     conn = redis.client.connectRedis('182.92.186.104', 6379, 2, 'Etang123')
-    print 'conn=', conn
-    print conn.send('keys', '*')
+    print('conn=', conn)
+    print(conn.send('keys', '*'))
 
 
 if __name__ == '__main__':

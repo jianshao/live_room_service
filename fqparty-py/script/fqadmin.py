@@ -165,7 +165,7 @@ def distribution_servers(config, typedServers):
     machineIndex = 0
     agentIndex = 0
     machines = sorted(load_matchines(config), key=lambda m:m['name'])
-    print 'machines=', machines
+    print('machines=', machines)
     agents = load_agents(config)
     
     # conn 和http优先处理，主要是nginx转发需要配置

@@ -35,7 +35,7 @@ def copy_sources(config):
     # 删除bin目录下所有目录
     compileBinPath = os.path.join(config['compilePath'], 'bin')
 
-    print 'copy_sources', compileBinPath
+    print('copy_sources', compileBinPath)
 
     if os.path.isdir(compileBinPath):
         shutil.rmtree(compileBinPath)
@@ -54,7 +54,7 @@ def copy_sources(config):
 def compile_sources(config):
     compileBinPath = os.path.join(config['compilePath'], 'bin')
 
-    print 'compile_sources', compileBinPath
+    print('compile_sources', compileBinPath)
 
     compileall.compile_dir(compileBinPath, quiet=1)
     dirs = [compileBinPath]
@@ -72,7 +72,7 @@ def compile_sources(config):
 
 def do_command_compile(commandCtx):
     # 拷贝源代码
-    print 'do_command_compile', commandCtx.args
+    print('do_command_compile', commandCtx.args)
     copy_sources(commandCtx.config)
     compile_sources(commandCtx.config)
 
@@ -87,7 +87,7 @@ def put_config_to_all_machine(commandCtx):
     '''
     奖所有配置写入redis
     '''
-    print 'put_config_to_all_machine', commandCtx.args
+    print('put_config_to_all_machine', commandCtx.args)
     machinesFilePath = os.path.join(commandCtx.config['configPath'], 'server/tomato/machines.json')
     machines = load_json_file(machinesFilePath)
 
@@ -99,18 +99,18 @@ def put_config_to_all_machine(commandCtx):
 
     tarFile = tttar.tar_cvfz(outPath, compileConfigPath)
 
-    print 'tarFile=', tarFile
+    print('tarFile=', tarFile)
 
     for machine in machines.values():
         put_tar_to_machine(commandCtx, machine, tarFile)
 
-    print 'put config finished'
+    print('put config finished')
 
 
 def do_command_config_compile(commandCtx):
     '''
     '''
-    print 'do_command_config_compile', commandCtx.args
+    print('do_command_config_compile', commandCtx.args)
     # 生成
     make_config(commandCtx.config)
 
@@ -118,13 +118,13 @@ def do_command_config_compile(commandCtx):
 def do_command_config_update(commandCtx):
     '''
     '''
-    print 'do_command_config_update', commandCtx.args
+    print('do_command_config_update', commandCtx.args)
     # 生成
     put_config_to_all_machine(commandCtx)
 
 
 def put_tar_to_machine(commandCtx, machine, tarFile):
-    print 'put_tar_to_machine', commandCtx.args, machine, sys.argv[0]
+    print('put_tar_to_machine', commandCtx.args, machine, sys.argv[0])
 
     deployPath = os.path.join(commandCtx.config['deployPath'])
 
@@ -136,7 +136,7 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
 
     if machine['ip'] in commandCtx.localIps:
         # 本机
-        print 'put_code_to_machine to local', tarFile
+        print('put_code_to_machine to local', tarFile)
         ensure_dir_exists(backPath)
         ensure_dir_exists(logsPath)
         ensure_dir_exists(scriptPath)
@@ -144,7 +144,7 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
         shutil.copy(remoteFile, remoteFileDest)
         return
 
-    print 'put_code_to_machine to remote', machine['ip']
+    print('put_code_to_machine to remote', machine['ip'])
 
     ssh = ttssh.connect(machine)
 
@@ -155,7 +155,7 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
 
     # 上传remote
     ssh.put_file(remoteFile, remoteFileDest)
-    print 'put_file', remoteFile, remoteFileDest, 'ok'
+    print('put_file', remoteFile, remoteFileDest, 'ok')
 
     localfilesize = os.path.getsize(tarFile)
 
@@ -167,11 +167,11 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
             p = int((float(sendsize_) / float(allsize_)) * 100)
 
         percent = '%03d' % (p) + '%'
-        print 'percent ', percent
+        print('percent ', percent)
 
     remoteTarFile = os.path.join(backPath, os.path.basename(tarFile))
 
-    print 'put_code_to_machine to remote', machine['ip'], tarFile, remoteTarFile
+    print('put_code_to_machine to remote', machine['ip'], tarFile, remoteTarFile)
 
     putsize = ssh.put_file(tarFile, remoteTarFile, update_send_size)
 
@@ -179,9 +179,9 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
         return 2, 'SSH Push ERROR ' + tarFile
 
     cmd = '%s %s xvf %s %s %s %s' % (commandCtx.config['pypy'], remoteFileDest, remoteTarFile, deployPath, 'bin', 1)
-    print 'exec remote command: ', cmd
+    print('exec remote command: ', cmd)
     lines = ssh.exec_command(cmd)
-    print lines
+    print(lines)
     return 0, None
 
 
@@ -189,7 +189,7 @@ def put_code_to_all_machine(commandCtx):
     '''
     推送代码到所有机器
     '''
-    print 'put_code_to_all_machine', commandCtx.args
+    print('put_code_to_all_machine', commandCtx.args)
     machinesFilePath = os.path.join(commandCtx.config['configPath'], 'server/tomato/machines.json')
     machines = load_json_file(machinesFilePath)
 
@@ -201,16 +201,16 @@ def put_code_to_all_machine(commandCtx):
 
     tarFile = tttar.tar_cvfz(outPath, compileBinPath)
 
-    print 'tarFile=', tarFile
+    print('tarFile=', tarFile)
     for machine in machines.values():
         put_tar_to_machine(commandCtx, machine, tarFile)
 
-    print 'put code finished'
+    print('put code finished')
 
 
 def do_command_put_code(commandCtx):
     # 拷贝源代码
-    print 'do_command_put_code', commandCtx.args
+    print('do_command_put_code', commandCtx.args)
     # 上传代码到所有机器
     put_code_to_all_machine(commandCtx)
 
@@ -259,10 +259,10 @@ def start_processes(commandCtx, machine, servers):
 
     if machine['ip'] in commandCtx.localIps:
         # 本机
-        print 'run local cmd', ' '.join(cmdline)
+        print('run local cmd', ' '.join(cmdline))
         ttssh.execute_command_local(cmdline)
     else:
-        print 'run remote cmd', machine['ip'], ' '.join(cmdline)
+        print('run remote cmd', machine['ip'], ' '.join(cmdline))
         ttssh.execute_command_remote(machine, cmdline)
 
 
@@ -270,10 +270,10 @@ def start_all_processes(commandCtx):
     '''
     启动所有进程
     '''
-    print 'start_all_processes', commandCtx.args
+    print('start_all_processes', commandCtx.args)
     # 获取排序规则
     if commandCtx.args.sort:
-        print 'start_all_processes sort'
+        print('start_all_processes sort')
 
     # 读取servers.json
     typedServerMap = load_deploy_servers_config(commandCtx.config)
@@ -281,7 +281,7 @@ def start_all_processes(commandCtx):
     # 最后启动conn
     serverTypes = sorted(typedServerMap.keys(), key=lambda serverType: sortServerType(serverType, len(typedServerMap)))
 
-    print serverTypes
+    print(serverTypes)
 
     machines = load_compile_matchines(commandCtx.config)
     machineMap = {m['name']: m for m in machines}
@@ -302,7 +302,7 @@ def start_all_processes(commandCtx):
 
 
 def do_command_start(commandCtx):
-    print 'do_command_start', commandCtx.args
+    print('do_command_start', commandCtx.args)
     make_config(commandCtx.config)
     copy_sources(commandCtx.config)
     compile_sources(commandCtx.config)
@@ -331,10 +331,10 @@ def stop_processes(commandCtx, machine, servers):
 
     if machine['ip'] in commandCtx.localIps:
         # 本机
-        print 'run local cmd', ' '.join(cmdline)
+        print('run local cmd', ' '.join(cmdline))
         ttssh.execute_command_local(cmdline)
     else:
-        print 'run remote cmd', machine['ip'], ' '.join(cmdline)
+        print('run remote cmd', machine['ip'], ' '.join(cmdline))
         ttssh.execute_command_remote(machine, cmdline)
 
 
@@ -364,7 +364,7 @@ def stop_all_processes(commandCtx):
 
 
 def do_command_stop(commandCtx):
-    print 'do_command_stop', commandCtx.args
+    print('do_command_stop', commandCtx.args)
     stop_all_processes(commandCtx)
 
 
@@ -386,16 +386,16 @@ def do_update_config(command_ctx):
         'serverIds': server_ids,
     }
 
-    print "serverIds   =", server_ids
-    print "http_url   =", http_url
-    print "params     =", params
+    print("serverIds   =", server_ids)
+    print("http_url   =", http_url)
+    print("params     =", params)
 
     result = requests.get(http_url, params=params)
-    print 'result    =', result.text
+    print('result    =', result.text)
 
 
 def do_command_update_config(command_ctx):
-    print 'do_command_update_config'
+    print('do_command_update_config')
     make_config(command_ctx.config)
     put_config_to_all_machine(command_ctx)
     do_update_config(command_ctx)

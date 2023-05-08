@@ -26,5 +26,5 @@ def tar_xvf(tarfilepath, out_dir):
 
 
 if __name__ == '__main__':
-    print tar_cvfz('compile', './compile')
+    print(tar_cvfz('compile', './compile'))
 

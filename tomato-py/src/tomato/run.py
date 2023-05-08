@@ -33,7 +33,7 @@ def parseStrRedisConf(redisConf):
 
 def main(args):
     if len(args) < 5:
-        print 'pypy run.py <serverId> <appModule>, <configPathOrConfigRedis> <logPath>'
+        print('pypy run.py <serverId> <appModule>, <configPathOrConfigRedis> <logPath>')
         return -1
     
     appArgs = args[5:]
