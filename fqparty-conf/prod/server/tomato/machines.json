@@ -6,13 +6,5 @@
 		"password":"fanqieyy@123",
 		"user":"newAbyy",
 		"ssh":22
-	},
-    "m2":{
-		"internet":"172.25.131.227",
-		"intranet":"172.25.131.227",
-		"ip":"172.25.131.227",
-		"password":"fanqieyy@123",
-		"user":"newAbyy",
-		"ssh":22
 	}
 }
