@@ -1,8 +1,8 @@
 {
-	"common":[{"host":"172.25.131.229", "port":6379, "db":0, "password":"123456"}],
-	"ranking":[{"host":"172.25.131.229", "port":6379, "db":1, "password":"123456"}],
-	"session":[{"host":"172.25.131.229", "port":6379, "db":0, "password":"123456"}],
-	"config":[{"host":"172.25.131.229", "port":6379, "db":3, "password":"123456"}],
-	"rooms":[{"host":"172.25.131.229", "port":6379, "db":5, "password":"123456"}],
-	"users":[{"host":"172.25.131.229", "port":6379, "db":9, "password":"123456"}]
+	"common":[{"host":"127.0.0.1", "port":6379, "db":0, "password":"123456"}],
+	"ranking":[{"host":"127.0.0.1", "port":6379, "db":1, "password":"123456"}],
+	"session":[{"host":"127.0.0.1", "port":6379, "db":0, "password":"123456"}],
+	"config":[{"host":"127.0.0.1", "port":6379, "db":3, "password":"123456"}],
+	"rooms":[{"host":"127.0.0.1", "port":6379, "db":5, "password":"123456"}],
+	"users":[{"host":"127.0.0.1", "port":6379, "db":9, "password":"123456"}]
 }
