@@ -6,15 +6,15 @@ Created on 2020年10月28日
 '''
 
 # map<name, connList>
-import pika
 from tomato.config import configure
 from tomato.db.mysql import client as mysqlClient
 from tomato.db.redis import client as redisClient
-
+from tomato.utils import ttlog
 
 _namedRedisConnMap = {}
 _namedMysqlConnMap = {}
 _namedMqChannelMap = {}
+
 
 def _getOrConnRedis(dbName):
     connList = _namedRedisConnMap.get(dbName)
@@ -22,8 +22,11 @@ def _getOrConnRedis(dbName):
         conf = configure.loadJson('server.fqparty.redis', {})
         confList = conf.get(dbName)
         connList = redisClient.connectRedisCluster(confList, 3, 3)
+        if not connList:
+            ttlog.error('connect redis failed, config = ', connList)
         _namedRedisConnMap[dbName] = connList
     return connList
+
 
 def getRedisConns(dbName):
     return _getOrConnRedis(dbName)
