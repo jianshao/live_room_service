@@ -1,8 +1,8 @@
 {
-	"common":[{"host":"172.21.0.6", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
-	"ranking":[{"host":"172.21.0.6", "port":6379, "db":1, "password":"nPyOOousxrIT7IQq"}],
-	"session":[{"host":"172.21.0.6", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
-	"config":[{"host":"172.21.0.6", "port":6379, "db":3, "password":"nPyOOousxrIT7IQq"}],
-	"rooms":[{"host":"172.21.0.6", "port":6379, "db":5, "password":"nPyOOousxrIT7IQq"}],
-	"users":[{"host":"172.21.0.6", "port":6379, "db":9, "password":"nPyOOousxrIT7IQq"}]
+	"common":[{"host":"10.0.16.11", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
+	"ranking":[{"host":"10.0.16.11", "port":6379, "db":1, "password":"nPyOOousxrIT7IQq"}],
+	"session":[{"host":"10.0.16.11", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
+	"config":[{"host":"10.0.16.11", "port":6379, "db":3, "password":"nPyOOousxrIT7IQq"}],
+	"rooms":[{"host":"10.0.16.11", "port":6379, "db":5, "password":"nPyOOousxrIT7IQq"}],
+	"users":[{"host":"10.0.16.11", "port":6379, "db":9, "password":"nPyOOousxrIT7IQq"}]
 }
