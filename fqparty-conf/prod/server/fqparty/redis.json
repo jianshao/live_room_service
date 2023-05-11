@@ -1,8 +1,8 @@
 {
-	"common":[{"host":"10.0.16.11", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
-	"ranking":[{"host":"10.0.16.11", "port":6379, "db":1, "password":"nPyOOousxrIT7IQq"}],
-	"session":[{"host":"10.0.16.11", "port":6379, "db":0, "password":"nPyOOousxrIT7IQq"}],
-	"config":[{"host":"10.0.16.11", "port":6379, "db":3, "password":"nPyOOousxrIT7IQq"}],
-	"rooms":[{"host":"10.0.16.11", "port":6379, "db":5, "password":"nPyOOousxrIT7IQq"}],
-	"users":[{"host":"10.0.16.11", "port":6379, "db":9, "password":"nPyOOousxrIT7IQq"}]
+	"common":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":0, "password":"vk_B34Tg)x@$5Rvb"}],
+	"ranking":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":1, "password":"vk_B34Tg)x@$5Rvb"}],
+	"session":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":0, "password":"vk_B34Tg)x@$5Rvb"}],
+	"config":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":3, "password":"vk_B34Tg)x@$5Rvb"}],
+	"rooms":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":5, "password":"vk_B34Tg)x@$5Rvb"}],
+	"users":[{"host":"bj-crs-kxk9azol.sql.tencentcdb.com", "port":28660, "db":9, "password":"vk_B34Tg)x@$5Rvb"}]
 }
