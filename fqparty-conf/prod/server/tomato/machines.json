@@ -6,5 +6,13 @@
 		"password":"python@123",
 		"user":"python",
 		"ssh":22
+	},
+	"m2":{
+		"internet":"10.0.16.9",
+		"intranet":"10.0.16.9",
+		"ip":"10.0.16.9",
+		"password":"python@123",
+		"user":"python",
+		"ssh":22
 	}
 }
