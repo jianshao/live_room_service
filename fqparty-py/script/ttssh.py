@@ -142,8 +142,14 @@ def execute_command_local(cmdline):
 def execute_command_remote(machine, cmdline):
     print('execute_command_remote', machine['ip'], ' '.join(cmdline))
     ssh = ttssh.connect(machine)
-    res = ssh.exec_command(' '.join(cmdline), getPty=False)
-    print(res)
+
+    cmds = [
+        'cd /home/python/live_room_service && source venv/bin/activate && %s' % ' '.join(cmdline)
+    ]
+    for cmd in cmds:
+        print('exec remote command: ', cmd)
+        res = ssh.exec_command(cmd, getPty=False)
+        print(res)
     
 # #     child1 = psutil.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 #     psutil.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
