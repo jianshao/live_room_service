@@ -81,7 +81,7 @@ def initServer():
     MicServer.confDao = confDao
     MicServer.roomDao = roomDao
     MicServer.userDao = userDao
-    MicServer.micMq = DaoMq(dao.getMqChannelConf('mic'))
+    # MicServer.micMq = DaoMq(dao.getMqChannelConf('mic'))
     MicServer.userCacheDao = UserCacheDaoRedis(userRedisDao)
     MicServer.sessionInfoDao = SessionInfoDaoRedis(userRedisDao)
     MicServer.roomStatusDao = RoomStatusDaoRedis(roomRedisDao)

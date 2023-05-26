@@ -336,7 +336,7 @@ class MicRoom(object):
             'timestamp': int(time.time()),
             'body': strutil.jsonDumps(body)
         }
-        MicServer.micMq.publish(exchange='ex_flow_message_bus', router='userOnMic', data=data)
+        # MicServer.micMq.publish(exchange='ex_flow_message_bus', router='userOnMic', data=data)
 
         ttlog.info('UserOnMic ok',
                    'roomId=', self.roomId,

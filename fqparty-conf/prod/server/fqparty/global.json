@@ -32,5 +32,5 @@
 		"chat": 10,
 		"member": 200
 	},
-	"phpServerUrl":"http://api.ddyuyin.com"
+	"phpServerUrl":"http://php-api.jiawei6.cn"
 }

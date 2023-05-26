@@ -178,8 +178,9 @@ def put_tar_to_machine(commandCtx, machine, tarFile):
     if int(putsize) != localfilesize:
         return 2, 'SSH Push ERROR ' + tarFile
 
+    venv = 'cd /home/python/live_room_service && source venv/bin/activate'
     cmds = [
-        'cd /home/python/live_room_service && source venv/bin/activate && %s %s xvf %s %s %s %s' % (commandCtx.config['pypy'], remoteFileDest, remoteTarFile, deployPath, 'bin', 1)
+        '%s && %s %s xvf %s %s %s %s' % (venv, commandCtx.config['pypy'], remoteFileDest, remoteTarFile, deployPath, 'bin', 1)
     ]
     for cmd in cmds:
         print('exec remote command: ', cmd)
