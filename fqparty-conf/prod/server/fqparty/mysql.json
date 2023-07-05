@@ -1,3 +1,3 @@
 {
-	"user":[{"host":"bj-cynosdbmysql-grp-7d5mc0ms.sql.tencentcdb.com", "port":25050, "db":"yinka", "userName":"python_mysql", "password":"U_XaF7CaPGZXK-WK"}]
+	"user":[{"host":"bj-cynosdbmysql-grp-4n26nr2y.sql.tencentcdb.com", "port":20286, "db":"yinka", "userName":"python_mysql", "password":"U_XaF7CaPGZXK-WK"}]
 }
